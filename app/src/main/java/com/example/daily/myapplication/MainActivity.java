@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.daily.myapplication.Adapter.TasksAdapter;
+import com.example.daily.myapplication.Comparator.byPriority;
 import com.example.daily.myapplication.DBHelper.DBHelper;
 import com.example.daily.myapplication.entityClass.Task;
 
@@ -109,9 +110,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_task:
-                //incomplete!
                 Intent intent = new Intent(MainActivity.this,add_new.class);
                 startActivityForResult(intent,1);
+                break;
+            case R.id.select:
+                List<Task> Tasks_selected = Tasks;
+                Tasks_selected.sort(new byPriority(1));
                 break;
         }
         return super.onOptionsItemSelected(item);

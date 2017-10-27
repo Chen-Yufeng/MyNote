@@ -8,7 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.example.daily.myapplication.MainActivity;
 import com.example.daily.myapplication.R;
@@ -20,6 +21,8 @@ public class ClockReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        Log.d("onReceiveIfChan", "com.example.daily.myapplication->onReceive: start");
         if(intent.getAction().equals("com.example.daily.myapplication.ACTION_SEND")) {
             Intent intent_toMain = new Intent(context, MainActivity.class);
             PendingIntent pendingIntent_toMain = PendingIntent.getActivity(context,0,intent_toMain,0);
@@ -32,11 +35,12 @@ public class ClockReceiver extends BroadcastReceiver {
                     .setSmallIcon(R.mipmap.ic_launcher_round)
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.mipmap.ic_launcher_round))
                     .setContentIntent(pendingIntent_toMain)
-                    .setSound(Uri.fromFile(new File("/system/media/audio/notifications/Jingle.ogg")))
+                    //.setSound(Uri.fromFile(new File("/system/media/audio/notifications/Jingle.ogg")))
                     .setAutoCancel(true)
                     .setPriority(NotificationCompat.PRIORITY_MAX)
                     .build();
             manager.notify(intent.getIntExtra("position",0),notification);
+            Log.d("onReceiveIfChan","com.example.daily.myapplication->onReceive: succ");
         }
     }
 }

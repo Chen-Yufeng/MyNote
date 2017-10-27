@@ -5,4 +5,8 @@
         android:id="@+id/add_task"
         android:title="NEW"/>
 
+    <item
+        android:id="@+id/select"
+        android:title="SELECT"/>
+
 </menu>
