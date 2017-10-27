@@ -9,4 +9,8 @@
         android:id="@+id/edit_menu_done"
         android:title="I HAVE DONE IT"/>
 
+    <item
+        android:id="@+id/add_new_menu_media"
+        android:title="Choose Media"/>
+
 </menu>

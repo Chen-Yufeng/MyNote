@@ -1,7 +1,11 @@
 package com.example.daily.myapplication;
 
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +19,11 @@ import com.example.daily.myapplication.TimeSelector.HMselector;
 import com.example.daily.myapplication.TimeSelector.Selector;
 import com.example.daily.myapplication.entityClass.Task;
 
+import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class EditPage extends AppCompatActivity {
     private EditText title, content, priority;
     private Button bt_date_1,bt_date_2,bt_time_1,bt_time_2,btUPDATE;
@@ -27,6 +36,7 @@ public class EditPage extends AppCompatActivity {
     private Task thisTask;
     private int position;
     boolean sync_date_1 = false,sync_date_2 = false,sync_time_1 = false,sync_time_2 = false;
+    File mediaFile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +137,81 @@ public class EditPage extends AppCompatActivity {
                 sendBroadcast(intent_done);
                 finish();
                 break;
+            case R.id.add_new_menu_media:
+                //File mediaDerector = new File("/system/media/audio/alarms/");
+                //File[] mediaFiles = mediaDerector.listFiles();
+                performFileSearch();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private static final int READ_REQUEST_CODE = 42;
+
+    /**
+     * Fires an intent to spin up the "file chooser" UI and select an image.
+     */
+    public void performFileSearch() {
+
+        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
+        // browser.
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+
+        // Filter to only show results that can be "opened", such as a
+        // file (as opposed to a list of contacts or timezones)
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        // Filter to show only images, using the image MIME data type.
+        // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
+        // To search for all documents available via installed storage providers,
+        // it would be "*/*".
+
+        //MAY BE A ERROR!!!
+        intent.setType("audio/*");
+
+        startActivityForResult(intent, READ_REQUEST_CODE);
+    }
+
+    /**
+     * 该方法使得notification播放用户自定义的media文件
+     * 注意使用的数据未被此次edit修改的Task！
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+
+        // The ACTION_OPEN_DOCUMENT intent was sent with the request code
+        // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
+        // response to some other intent, and the code below shouldn't run at all.
+
+        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // The document selected by the user won't be returned in the intent.
+            // Instead, a URI to that document will be contained in the return intent
+            // provided to this method as a parameter.
+            // Pull that URI using resultData.getData().
+            Uri uri = null;
+            if (resultData != null) {
+                uri = resultData.getData();
+                mediaFile = new File(uri.getPath());
+                //未完成！！！
+                //get time
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                    Date date = sdf.parse(thisTask.getdeadLineTime());
+                    long dateFromEpoch = date.getTime();
+                    //set clock
+                    Intent intent = new Intent("com.example.daily.myapplication.ACTION_SEND");
+                    intent.putExtra("aTask",thisTask);
+                    intent.putExtra("position",position);
+                    intent.putExtra("mediaFile",mediaFile);
+                    PendingIntent sendIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    am.cancel(sendIntent);
+                    am.set(AlarmManager.RTC_WAKEUP,dateFromEpoch,sendIntent);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

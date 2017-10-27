@@ -8,14 +8,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import com.example.daily.myapplication.Adapter.TasksAdapter;
 import com.example.daily.myapplication.Comparator.byPriority;
@@ -23,8 +19,6 @@ import com.example.daily.myapplication.DBHelper.DBHelper;
 import com.example.daily.myapplication.entityClass.Task;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -110,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_task:
-                Intent intent = new Intent(MainActivity.this,add_new.class);
+                Intent intent = new Intent(MainActivity.this,AddNew.class);
                 startActivityForResult(intent,1);
                 break;
             case R.id.select:
