@@ -1,5 +1,7 @@
 package com.example.daily.myapplication.Adapter;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +15,12 @@ import com.example.daily.myapplication.EditPage;
 import com.example.daily.myapplication.R;
 import com.example.daily.myapplication.entityClass.Task;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Scanner;
 
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> {
 
@@ -74,6 +81,24 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
             holder.doneFlag.setText("☑");
         else
             holder.doneFlag.setText("☐");
+
+        //get time
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+            Date date = sdf.parse(aTask.getdeadLineTime());
+            long dateFromEpoch = date.getTime();
+            //set clock
+            Intent intent = new Intent("com.example.daily.myapplication.ACTION_SEND");
+            intent.putExtra("aTask",aTask);
+            intent.putExtra("position",position);
+            PendingIntent sendIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            am.cancel(sendIntent);
+            am.set(AlarmManager.RTC_WAKEUP,dateFromEpoch,sendIntent);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
