@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/edit_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="enter a title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/edit_date_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DATE"/>
+
+        <Button
+            android:id="@+id/edit_time_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TIME"/>
+
+        <Button
+            android:id="@+id/edit_date_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DATE"/>
+
+
+        <Button
+            android:id="@+id/edit_time_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TIME"/>
+
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edit_content"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="start"
+        android:hint="enter content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <EditText
+            android:hint="priority"
+            android:id="@+id/edit_priority"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/edit_btADD"
+            android:text="UPDATE"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>
