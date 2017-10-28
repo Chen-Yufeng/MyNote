@@ -10,8 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.daily.myapplication.Adapter.TasksAdapter;
 import com.example.daily.myapplication.Comparator.byPriority;
@@ -93,6 +95,25 @@ public class MainActivity extends AppCompatActivity {
         intentFliter_menu.addAction("com.example.daily.myapplication.EDIT_MENU");
         registerReceiver(editMenuReceiver,intentFliter_menu);
 
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                Toast.makeText(MainActivity.this, "on Move", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                //Remove swiped item from list and notify the RecyclerView
+                final int position = viewHolder.getAdapterPosition();
+                Tasks.remove(position);
+                dbHelper.delTask(position + 1,db);
+                tasksAdapter.notifyItemRemoved(position);
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,8 +129,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent,1);
                 break;
             case R.id.select:
-                List<Task> Tasks_selected = Tasks;
-                Tasks_selected.sort(new byPriority(1));
+                //List<Task> Tasks_selected = Tasks;
+                //Tasks_selected.sort(new byPriority(1));
                 break;
         }
         return super.onOptionsItemSelected(item);

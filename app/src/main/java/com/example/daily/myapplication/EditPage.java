@@ -23,7 +23,6 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 public class EditPage extends AppCompatActivity {
     private EditText title, content, priority;
     private Button bt_date_1,bt_date_2,bt_time_1,bt_time_2,btUPDATE;
@@ -174,7 +173,7 @@ public class EditPage extends AppCompatActivity {
 
     /**
      * 该方法使得notification播放用户自定义的media文件
-     * 注意使用的数据未被此次edit修改的Task！
+     * 注意使用的数据是未被此次edit修改的Task！
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode,
