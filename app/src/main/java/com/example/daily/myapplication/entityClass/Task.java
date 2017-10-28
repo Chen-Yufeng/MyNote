@@ -38,6 +38,7 @@ public class Task implements Serializable {
         hashCode = hashCode();
     }
 
+
     public String getTitle() {
         return title;
     }

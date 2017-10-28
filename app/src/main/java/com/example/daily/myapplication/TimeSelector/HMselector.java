@@ -28,17 +28,17 @@ public class HMselector extends DialogFragment
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
         String formal_hour, formal_minute;
-        if(hourOfDay<10) {
+        if (hourOfDay < 10) {
             formal_hour = "0" + hourOfDay;
         } else {
             formal_hour = Integer.toString(hourOfDay);
         }
-        if(minute<10) {
-            formal_minute = "0"+minute;
+        if (minute < 10) {
+            formal_minute = "0" + minute;
         } else {
             formal_minute = Integer.toString(minute);
         }
-        time = " "+formal_hour+":"+formal_minute;
+        time = " " + formal_hour + ":" + formal_minute;
     }
 
     public String getTime() {

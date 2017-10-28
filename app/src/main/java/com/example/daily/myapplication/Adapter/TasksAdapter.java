@@ -25,7 +25,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
     private List<Task> Tasks;
     private Context context;
 
-    public TasksAdapter(List<Task> Tasks,Context context) {
+    public TasksAdapter(List<Task> Tasks, Context context) {
         this.Tasks = Tasks;
         this.context = context;
     }
@@ -33,23 +33,24 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
     //static Why?
     static class ViewHolder extends RecyclerView.ViewHolder {
         View tasksView;
-        TextView title, setTime, deadLineTime, content, priority,doneFlag;
+        TextView title, setTime, deadLineTime, content, priority, doneFlag;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tasksView = itemView;
-            title = (TextView)itemView.findViewById(R.id.title);
-            setTime = (TextView)itemView.findViewById(R.id.setTime);
-            deadLineTime = (TextView)itemView.findViewById(R.id.deadLineTime);
-            content = (TextView)itemView.findViewById(R.id.content);
-            priority = (TextView)itemView.findViewById(R.id.priority);
-            doneFlag = (TextView)itemView.findViewById(R.id.doneFlag);
+            title = (TextView) itemView.findViewById(R.id.title);
+            setTime = (TextView) itemView.findViewById(R.id.setTime);
+            deadLineTime = (TextView) itemView.findViewById(R.id.deadLineTime);
+            content = (TextView) itemView.findViewById(R.id.content);
+            priority = (TextView) itemView.findViewById(R.id.priority);
+            doneFlag = (TextView) itemView.findViewById(R.id.doneFlag);
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_item, parent,
+                false);
         final ViewHolder holder = new ViewHolder(view);
         holder.tasksView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,11 +59,12 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
                 Task thisTask = Tasks.get(position);
                 Intent intent = new Intent(context, EditPage.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("position",position);
-                bundle.putSerializable("thisTask",thisTask);
+                bundle.putInt("position", position);
+                bundle.putSerializable("thisTask", thisTask);
                 intent.putExtras(bundle);
                 context.startActivity(intent);
-            }});
+            }
+        });
         return holder;
     }
 
@@ -75,30 +77,10 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
         holder.deadLineTime.setText(aTask.getdeadLineTime());
         holder.priority.setText(Integer.toString(aTask.getPriority()));
         holder.content.setText(aTask.getContent());
-        if(aTask.getDoneFlag()==1)
+        if (aTask.getDoneFlag() == 1)
             holder.doneFlag.setText("☑");
         else
             holder.doneFlag.setText("☐");
-
-        //get time
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-            Date date = sdf.parse(aTask.getdeadLineTime());
-            long dateFromEpoch = date.getTime();
-            //set clock
-            Intent intent = new Intent("com.example.daily.myapplication.ACTION_SEND"+"_"+aTask.getHashCode());
-//            Bundle bundle = new Bundle();
-//            bundle.putInt("position",position);
-//            bundle.putSerializable("aTask",aTask);
-//            intent.putExtras(bundle);
-//            PendingIntent 第二个参数以后改成hashcode(单独保存在Task)
-            PendingIntent sendIntent = PendingIntent.getBroadcast(context, aTask.getHashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
-            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            am.cancel(sendIntent);
-            am.set(AlarmManager.RTC_WAKEUP,dateFromEpoch,sendIntent);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
     }
 
