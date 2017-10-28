@@ -86,10 +86,13 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
             Date date = sdf.parse(aTask.getdeadLineTime());
             long dateFromEpoch = date.getTime();
             //set clock
-            Intent intent = new Intent("com.example.daily.myapplication.ACTION_SEND");
-            intent.putExtra("aTask",aTask);
-            intent.putExtra("position",position);
-            PendingIntent sendIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            Intent intent = new Intent("com.example.daily.myapplication.ACTION_SEND"+"_"+aTask.getHashCode());
+//            Bundle bundle = new Bundle();
+//            bundle.putInt("position",position);
+//            bundle.putSerializable("aTask",aTask);
+//            intent.putExtras(bundle);
+//            PendingIntent 第二个参数以后改成hashcode(单独保存在Task)
+            PendingIntent sendIntent = PendingIntent.getBroadcast(context, aTask.getHashCode(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
             AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             am.cancel(sendIntent);
             am.set(AlarmManager.RTC_WAKEUP,dateFromEpoch,sendIntent);

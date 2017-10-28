@@ -11,7 +11,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper{
-    private SQLiteDatabase db = null;
 
     public static final String CREATE_BOOK = "create table Tasks(" +
             "id integer primary key autoincrement" +

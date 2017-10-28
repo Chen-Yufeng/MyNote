@@ -200,10 +200,12 @@ public class EditPage extends AppCompatActivity {
                     long dateFromEpoch = date.getTime();
                     //set clock
                     Intent intent = new Intent("com.example.daily.myapplication.ACTION_SEND");
-                    intent.putExtra("aTask",thisTask);
-                    intent.putExtra("position",position);
-                    intent.putExtra("mediaFile",mediaFile);
-                    PendingIntent sendIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("aTask",thisTask);
+                    bundle.putInt("position",position);
+                    bundle.putSerializable("mediaFile",mediaFile);
+                    intent.putExtras(bundle);
+                    PendingIntent sendIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                     AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                     am.cancel(sendIntent);
                     am.set(AlarmManager.RTC_WAKEUP,dateFromEpoch,sendIntent);
