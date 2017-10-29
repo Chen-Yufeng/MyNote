@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private EditReceiver editReceiver;
     private EditMenuReceiver editMenuReceiver;
     private IntentFilter intentFliter, intentFliter_menu;
+    private int containNum = 0;
 
     @Override
     protected void onPause() {
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 Integer priority = cursor.getInt(cursor.getColumnIndex("priority"));
                 Integer doneFlag = cursor.getInt(cursor.getColumnIndex("doneFlag"));
                 Tasks.add(new Task(title, conTent, setTime, deadLineTime, priority, doneFlag));
+                containNum++;
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -141,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 //Remove swiped item from list and notify the RecyclerView
                 final int position = viewHolder.getAdapterPosition();
                 Tasks.remove(position);
+                containNum--;
                 dbHelper.delTask(position + 1, db);
                 tasksAdapter.notifyItemRemoved(position);
             }
@@ -211,7 +214,8 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     Task newTask = (Task) data.getSerializableExtra("newTask");
                     Tasks.add(newTask);
-                    dbHelper.addTask(newTask, db);
+                    dbHelper.addTask(containNum+1 ,newTask, db);
+                    containNum++;
                     tasksAdapter.notifyItemInserted(Tasks.size() - 1);
                 }
         }
@@ -239,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
                 position = bundle.getInt("DELETE_POSITION", 0);
                 dbHelper.delTask(position + 1, db);
                 Tasks.remove(position);
+                containNum--;
                 tasksAdapter.notifyItemRemoved(position);
             } else if (menuCommand.equals("DONE")) {
                 position = bundle.getInt("DONE_POSITION", 0);

@@ -15,7 +15,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private final String TAG = "@vir DBHelper";
 
     public static final String CREATE_BOOK = "create table Tasks(" +
-            "id integer primary key autoincrement" +
+            "id integer primary key" +
             ",title text," +
             "content text," +
             "setTime text," +
@@ -45,10 +45,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public void addTask(Task task, SQLiteDatabase db) {
+    public void addTask( int position, Task task, SQLiteDatabase db) {
         Log.d(TAG, "addTask: Task = "+task.toString());
-        db.execSQL("insert into Tasks (title, content, setTime, deadLineTime, priority, doneFlag, hashCode) values(?, ?, ?, ?, ?, ?, ?)"
-                , new String[]{task.getTitle(), task.getContent(), task.getSetTime(),
+        db.execSQL("insert into Tasks (id, title, content, setTime, deadLineTime, priority, " +
+                        "doneFlag, hashCode) values(?, ?, ?, ?, ?, ?, ?, ?)"
+                , new String[]{Integer.toString(position), task.getTitle(), task.getContent(), task
+                        .getSetTime(),
                         task.getdeadLineTime(), Integer.toString(task.getPriority()), Integer
                         .toString(task.getDoneFlag()), Integer.toString(task.getHashCode())});
     }
