@@ -13,14 +13,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.daily.myapplication.Adapter.TasksAdapter;
 import com.example.daily.myapplication.Comparator.byPriority;
@@ -52,12 +50,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        db.close();
         unregisterReceiver(editReceiver);
         unregisterReceiver(editMenuReceiver);
 
@@ -173,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_task:
-                Intent intent = new Intent(MainActivity.this, AddNew.class);
+                Intent intent = new Intent(MainActivity.this, AddNewActivity.class);
                 startActivityForResult(intent, 1);
                 break;
             case R.id.select:
@@ -190,9 +188,9 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "onClick: click");
                         Collections.sort(Tasks, new byPriority(1));
                         tasksAdapter.notifyDataSetChanged();
-                        dbHelper.removeAllColumns(db);
+                        int i = 1;
                         for (Task task : Tasks) {
-                            dbHelper.addTask(task, db);
+                            dbHelper.updateTask(i,task,db);
                         }
                     }
                 });

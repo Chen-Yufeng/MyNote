@@ -21,8 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddNew" />
-        <activity android:name=".EditPage" />
+        <activity android:name=".AddNewActivity" />
+        <activity android:name=".EditPageActivity" />
 
         <receiver
             android:name=".BroadcastReceiver.ClockReceiver"

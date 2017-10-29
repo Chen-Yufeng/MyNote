@@ -1,7 +1,5 @@
 package com.example.daily.myapplication.Adapter;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,13 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.daily.myapplication.EditPage;
+import com.example.daily.myapplication.EditPageActivity;
 import com.example.daily.myapplication.R;
 import com.example.daily.myapplication.entityClass.Task;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> {
@@ -57,7 +52,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder> 
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 Task thisTask = Tasks.get(position);
-                Intent intent = new Intent(context, EditPage.class);
+                Intent intent = new Intent(context, EditPageActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("position", position);
                 bundle.putSerializable("thisTask", thisTask);

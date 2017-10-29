@@ -24,8 +24,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class EditPage extends AppCompatActivity {
-    private final String TAG = "@vir EditPage";
+public class EditPageActivity extends AppCompatActivity {
+    private final String TAG = "@vir EditPageActivity";
     private EditText title, content, priority;
     private Button bt_date_1, bt_date_2, bt_time_1, bt_time_2, btUPDATE;
     private Selector selector_1 = new Selector();

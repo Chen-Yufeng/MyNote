@@ -11,7 +11,7 @@ public class Task implements Serializable {
     private String setTime, deadLineTime;
     private int priority;
     private int doneFlag;
-    private int hashCode;
+    private int hashCode = 0;
 
     @Override
     public String toString() {
@@ -22,20 +22,21 @@ public class Task implements Serializable {
                 ", deadLineTime='" + deadLineTime + '\'' +
                 ", priority=" + priority +
                 ", doneFlag=" + doneFlag +
+                ", hashCode=" + hashCode +
                 '}';
     }
 
     public Task() {
     }
 
-    public Task(String title, String content, String setTime, String deadLineTime, int priority, int doneFlag) {
+    public Task(String title, String content, String setTime, String deadLineTime, int priority,
+                int doneFlag) {
         this.title = title;
         this.content = content;
         this.setTime = setTime;
         this.deadLineTime = deadLineTime;
         this.priority = priority;
         this.doneFlag = doneFlag;
-        hashCode = hashCode();
     }
 
 

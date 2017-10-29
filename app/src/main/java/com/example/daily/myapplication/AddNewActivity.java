@@ -1,33 +1,27 @@
 package com.example.daily.myapplication;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.daily.myapplication.BroadcastReceiver.ClockReceiver;
 import com.example.daily.myapplication.TimeSelector.HMselector;
 import com.example.daily.myapplication.TimeSelector.Selector;
 import com.example.daily.myapplication.entityClass.Task;
 
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class AddNew extends AppCompatActivity {
+public class AddNewActivity extends AppCompatActivity {
     private Task newTask;
     private String mtitle, mcontent, msetTime, mdeadLineTime;
     private int mpriority;
@@ -95,6 +89,7 @@ public class AddNew extends AppCompatActivity {
                 mdeadLineTime = selector_2.getTime() + hMselector_2.getTime();
                 Log.d("TestIfChan", "before back 6");
                 newTask = new Task(mtitle, mcontent, msetTime, mdeadLineTime, mpriority, 0);
+                newTask.setHashCode(newTask.hashCode());
                 //get time
                 try {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
@@ -105,7 +100,7 @@ public class AddNew extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("aTask", newTask);
                     intent.putExtra("test",bundle);
-                    PendingIntent sendIntent = PendingIntent.getBroadcast(AddNew.this, newTask
+                    PendingIntent sendIntent = PendingIntent.getBroadcast(AddNewActivity.this, newTask
                                     .getHashCode(),
                             intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
