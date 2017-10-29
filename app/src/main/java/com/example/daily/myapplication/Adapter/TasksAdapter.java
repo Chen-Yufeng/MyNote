@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.daily.myapplication.EditPageActivity;
 import com.example.daily.myapplication.R;
-import com.example.daily.myapplication.entityClass.Task;
+import com.example.daily.myapplication.EntityClass.Task;
 
 import java.util.List;
 

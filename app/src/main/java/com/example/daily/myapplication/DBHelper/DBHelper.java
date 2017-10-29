@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.daily.myapplication.entityClass.Task;
+import com.example.daily.myapplication.EntityClass.Task;
 
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -63,7 +63,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void updateTask(int position, Task thisTask, SQLiteDatabase db) {
-
+        Log.d(TAG, "updateTask: doneFlag = "+thisTask.getDoneFlag());
         db.beginTransaction();
         db.execSQL("update Tasks set title = ? where id = ?", new String[]{thisTask.getTitle(),
                 Integer.toString(position)});
@@ -77,6 +77,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 (thisTask.getPriority()), Integer.toString(position)});
         db.execSQL("update Tasks set hashCode = ? where id = ?", new String[]{Integer.toString
                 (thisTask.getHashCode()), Integer.toString(position)});
+        db.execSQL("update Tasks set doneFlag = ? where id = ?", new String[]{Integer.toString
+                (thisTask.getDoneFlag()), Integer.toString(position)});
         db.setTransactionSuccessful();
         db.endTransaction();
     }

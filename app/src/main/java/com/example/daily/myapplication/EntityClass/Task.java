@@ -1,7 +1,6 @@
-package com.example.daily.myapplication.entityClass;
+package com.example.daily.myapplication.EntityClass;
 
 import java.io.Serializable;
-import java.util.GregorianCalendar;
 
 /**
  * String title, String content, String setTime, String deadLineTime, int priority, int doneFlag

@@ -14,7 +14,7 @@ import android.widget.EditText;
 
 import com.example.daily.myapplication.TimeSelector.HMselector;
 import com.example.daily.myapplication.TimeSelector.Selector;
-import com.example.daily.myapplication.entityClass.Task;
+import com.example.daily.myapplication.EntityClass.Task;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +35,7 @@ public class AddNewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.addtask);
+        setContentView(R.layout.add_task);
         title = (EditText) findViewById(R.id.add_title);
         content = (EditText) findViewById(R.id.add_content);
         priority = (EditText) findViewById(R.id.add_priority);

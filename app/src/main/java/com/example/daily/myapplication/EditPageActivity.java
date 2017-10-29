@@ -17,7 +17,7 @@ import android.widget.EditText;
 
 import com.example.daily.myapplication.TimeSelector.HMselector;
 import com.example.daily.myapplication.TimeSelector.Selector;
-import com.example.daily.myapplication.entityClass.Task;
+import com.example.daily.myapplication.EntityClass.Task;
 
 import java.io.File;
 import java.text.ParseException;

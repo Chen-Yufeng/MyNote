@@ -13,7 +13,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.example.daily.myapplication.MainActivity;
 import com.example.daily.myapplication.R;
-import com.example.daily.myapplication.entityClass.Task;
+import com.example.daily.myapplication.EntityClass.Task;
 
 import java.io.File;
 

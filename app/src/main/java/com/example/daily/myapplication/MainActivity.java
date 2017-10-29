@@ -21,10 +21,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.daily.myapplication.Adapter.TasksAdapter;
+import com.example.daily.myapplication.Comparator.DoneFlag;
 import com.example.daily.myapplication.Comparator.Priority;
+import com.example.daily.myapplication.Comparator.Time;
 import com.example.daily.myapplication.DBHelper.DBHelper;
 import com.example.daily.myapplication.Dialog.SortSelector;
-import com.example.daily.myapplication.entityClass.Task;
+import com.example.daily.myapplication.EntityClass.Task;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private EditMenuReceiver editMenuReceiver;
     private IntentFilter intentFliter, intentFliter_menu;
     private int containNum = 0;
+    private boolean sortFlagPriority = true, sortFlagDoneFlag = true, sortFlagSetTime = true,
+            sortFlagDeadLineTime = true;
 
     @Override
     protected void onPause() {
@@ -87,9 +91,11 @@ public class MainActivity extends AppCompatActivity {
                 String conTent = cursor.getString(cursor.getColumnIndex("content"));
                 String setTime = cursor.getString(cursor.getColumnIndex("setTime"));
                 String deadLineTime = cursor.getString(cursor.getColumnIndex("deadLineTime"));
-                Integer priority = cursor.getInt(cursor.getColumnIndex("priority"));
-                Integer doneFlag = cursor.getInt(cursor.getColumnIndex("doneFlag"));
-                Tasks.add(new Task(title, conTent, setTime, deadLineTime, priority, doneFlag));
+                int priority = cursor.getInt(cursor.getColumnIndex("priority"));
+                int doneFlag = cursor.getInt(cursor.getColumnIndex("doneFlag"));
+                Task aTask = new Task(title, conTent, setTime, deadLineTime, priority, doneFlag);
+                aTask.setHashCode(aTask.hashCode());
+                Tasks.add(aTask);
                 containNum++;
             } while (cursor.moveToNext());
         }
@@ -120,10 +126,10 @@ public class MainActivity extends AppCompatActivity {
                                   RecyclerView.ViewHolder target) {
                 int fromPosition = viewHolder.getAdapterPosition();
                 int toPosition = target.getAdapterPosition();
-                Log.d(TAG, "onMove: fromPosition="+fromPosition+"toPosition="+toPosition);
+                Log.d(TAG, "onMove: fromPosition=" + fromPosition + "toPosition=" + toPosition);
 
-                dbHelper.updateTask(fromPosition+1,Tasks.get(toPosition),db);
-                dbHelper.updateTask(toPosition+1,Tasks.get(fromPosition),db);
+                dbHelper.updateTask(fromPosition + 1, Tasks.get(toPosition), db);
+                dbHelper.updateTask(toPosition + 1, Tasks.get(fromPosition), db);
 
                 if (fromPosition < toPosition) {
                     for (int i = fromPosition; i < toPosition; i++) {
@@ -178,26 +184,95 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
                 break;
             case R.id.select:
-                SortSelector sortSelector = new SortSelector(MainActivity.this);
+                final SortSelector sortSelector = new SortSelector(MainActivity.this);
                 //加载布局管理器
                 LayoutInflater layoutInflater = LayoutInflater.from(this);
                 //将xml布局转换为view对象
                 LinearLayout layout = (LinearLayout) layoutInflater.inflate(R.layout
                         .sort_selector, null);
-                Button btSortByPriority = (Button) layout.findViewById(R.id.selector_byPriority);
+                Button btSortByPriority = layout.findViewById(R.id.selector_byPriority);
+                Button btSortByDoneFlag = layout.findViewById(R.id.selector_byDoneFlag);
+                Button btSortBySetTime = layout.findViewById(R.id.selector_bySetTime);
+                Button btSortByDeadLineTime = layout.findViewById(R.id.selector_byDeadLineTime);
+                //test
+                Button test = layout.findViewById(R.id.selector_test);
+                test.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Task testTask1 = new Task("1","1","2017/10/15 20:20","2017/10/15 20:30",
+                                5,0);
+                        testTask1.setHashCode(testTask1.hashCode());
+                        Task testTask2 = new Task("2","2","2017/10/14 20:20","2017/10/16 20:30",
+                                3,1);
+                        testTask1.setHashCode(testTask1.hashCode());
+                        Task testTask3 = new Task("3","3","2017/11/15 20:20","2017/11/15 20:30",
+                                2,0);
+                        testTask1.setHashCode(testTask1.hashCode());
+                        Task testTask4 = new Task("4","4","2017/10/15 02:20","2017/10/15 03:30",
+                                7,1);
+                        testTask1.setHashCode(testTask1.hashCode());
+                        testTask2.setHashCode(testTask2.hashCode());
+                        testTask3.setHashCode(testTask3.hashCode());
+                        testTask4.setHashCode(testTask4.hashCode());
+                        dbHelper.addTask(++containNum, testTask1, db);
+                        dbHelper.addTask(++containNum, testTask2, db);
+                        dbHelper.addTask(++containNum, testTask3, db);
+                        dbHelper.addTask(++containNum, testTask4, db);
+                    }
+                });
                 btSortByPriority.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d(TAG, "onClick: click");
-                        Collections.sort(Tasks, new Priority(1));
+                        Collections.sort(Tasks, new Priority(sortFlagPriority));
                         tasksAdapter.notifyDataSetChanged();
                         int i = 1;
                         for (Task task : Tasks) {
-                            dbHelper.updateTask(i,task,db);
+                            dbHelper.updateTask(i, task, db);
                             i++;
                         }
+                        sortFlagPriority = !sortFlagPriority;
                     }
                 });
+                btSortByDoneFlag.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Collections.sort(Tasks, new DoneFlag(sortFlagDoneFlag));
+                        tasksAdapter.notifyDataSetChanged();
+                        int i = 1;
+                        for (Task task : Tasks) {
+                            dbHelper.updateTask(i, task, db);
+                            i++;
+                        }
+                        sortFlagDoneFlag = !sortFlagDoneFlag;
+                    }
+                });
+                btSortBySetTime.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Collections.sort(Tasks, new Time(1,sortFlagSetTime));
+                        tasksAdapter.notifyDataSetChanged();
+                        int i = 1;
+                        for (Task task : Tasks) {
+                            dbHelper.updateTask(i, task, db);
+                            i++;
+                        }
+                        sortFlagSetTime = !sortFlagSetTime;
+                    }
+                });
+                btSortByDeadLineTime.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Collections.sort(Tasks, new Time(-1,sortFlagDeadLineTime));
+                        tasksAdapter.notifyDataSetChanged();
+                        int i = 1;
+                        for (Task task : Tasks) {
+                            dbHelper.updateTask(i, task, db);
+                            i++;
+                        }
+                        sortFlagDeadLineTime = !sortFlagDeadLineTime;
+                    }
+                });
+
                 sortSelector.setContentView(layout);
                 sortSelector.show();
                 break;
@@ -214,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     Task newTask = (Task) data.getSerializableExtra("newTask");
                     Tasks.add(newTask);
-                    dbHelper.addTask(containNum+1 ,newTask, db);
+                    dbHelper.addTask(containNum + 1, newTask, db);
                     containNum++;
                     tasksAdapter.notifyItemInserted(Tasks.size() - 1);
                 }
@@ -247,9 +322,10 @@ public class MainActivity extends AppCompatActivity {
                 tasksAdapter.notifyItemRemoved(position);
             } else if (menuCommand.equals("DONE")) {
                 position = bundle.getInt("DONE_POSITION", 0);
-                Log.d(TAG, "onReceive: bundle.position = "+position);
+                Log.d(TAG, "onReceive: bundle.position = " + position);
                 Task thisTask = Tasks.get(position);
                 thisTask.setDoneFlag(1);
+                Log.d(TAG, "onReceive: thisTask = " + thisTask);
                 Tasks.remove(position);
                 Tasks.add(position, thisTask);
                 dbHelper.updateTask(position + 1, thisTask, db);
