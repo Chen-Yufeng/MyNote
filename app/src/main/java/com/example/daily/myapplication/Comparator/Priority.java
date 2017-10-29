@@ -4,11 +4,11 @@ import com.example.daily.myapplication.entityClass.Task;
 
 import java.util.Comparator;
 
-public class byPriority implements Comparator<Task> {
+public class Priority implements Comparator<Task> {
 
     private int method = 0;
 
-    public byPriority(int method) {
+    public Priority(int method) {
         this.method = method;
     }
 

@@ -205,11 +205,11 @@ public class EditPageActivity extends AppCompatActivity {
                     Intent intent = new Intent("com.example.daily.myapplication.ACTION_SEND");
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("aTask", thisTask);
-                    bundle.putInt("position", position);
-                    bundle.putSerializable("mediaFile", mediaFile);
-                    intent.putExtras(bundle);
-                    PendingIntent sendIntent = PendingIntent.getBroadcast(this, 0, intent,
-                            PendingIntent.FLAG_CANCEL_CURRENT);
+                    bundle.putSerializable("mediaFile",mediaFile);
+                    intent.putExtra("test",bundle);
+                    PendingIntent sendIntent = PendingIntent.getBroadcast(EditPageActivity.this, thisTask
+                                    .getHashCode(),
+                            intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                     am.cancel(sendIntent);
                     am.set(AlarmManager.RTC_WAKEUP, dateFromEpoch, sendIntent);

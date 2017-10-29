@@ -61,24 +61,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void updateTask(int position, Task thisTask, SQLiteDatabase db) {
-        /*db.execSQL("update Tasks set " +
-                "title ?," +
-                "content ?," +
-                "setTime ?," +
-                "deadLineTime ?," +
-                "priority ? " +
-                "where id = ?",new String[] {thisTask.getTitle(),thisTask.getContent(),
-        thisTask.getSetTime(),thisTask.getdeadLineTime(),Integer.toString(thisTask.getPriority()),
-        Integer.toString(position)});*/
-        /*String strSQL = "UPDATE Tasks SET title = " +
-                thisTask.getTitle()+", content = " +
-                thisTask.getContent()+", setTime= " +
-                thisTask.getSetTime()+", deadLineTime = " +
-                thisTask.getdeadLineTime()+", priority = " +
-                Integer.toString(thisTask.getPriority())+" " +
-                "WHERE columnId = "+ position;
 
-        db.execSQL(strSQL);*/
         db.beginTransaction();
         db.execSQL("update Tasks set title = ? where id = ?", new String[]{thisTask.getTitle(),
                 Integer.toString(position)});
@@ -92,7 +75,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 (thisTask.getPriority()), Integer.toString(position)});
         db.execSQL("update Tasks set hashCode = ? where id = ?", new String[]{Integer.toString
                 (thisTask.getHashCode()), Integer.toString(position)});
-//        db.beginTransaction();
         db.setTransactionSuccessful();
         db.endTransaction();
     }

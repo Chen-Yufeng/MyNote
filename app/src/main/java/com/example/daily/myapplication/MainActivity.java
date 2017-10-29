@@ -21,7 +21,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.daily.myapplication.Adapter.TasksAdapter;
-import com.example.daily.myapplication.Comparator.byPriority;
+import com.example.daily.myapplication.Comparator.Priority;
 import com.example.daily.myapplication.DBHelper.DBHelper;
 import com.example.daily.myapplication.Dialog.SortSelector;
 import com.example.daily.myapplication.entityClass.Task;
@@ -186,11 +186,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Log.d(TAG, "onClick: click");
-                        Collections.sort(Tasks, new byPriority(1));
+                        Collections.sort(Tasks, new Priority(1));
                         tasksAdapter.notifyDataSetChanged();
                         int i = 1;
                         for (Task task : Tasks) {
                             dbHelper.updateTask(i,task,db);
+                            i++;
                         }
                     }
                 });
@@ -241,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
                 tasksAdapter.notifyItemRemoved(position);
             } else if (menuCommand.equals("DONE")) {
                 position = bundle.getInt("DONE_POSITION", 0);
+                Log.d(TAG, "onReceive: bundle.position = "+position);
                 Task thisTask = Tasks.get(position);
                 thisTask.setDoneFlag(1);
                 Tasks.remove(position);
